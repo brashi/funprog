@@ -14,16 +14,25 @@ safetail xs = if null xs then [] else tail xs
 safetail' xs | null xs = []
             | otherwise = tail xs
 safetail'' [] = []
-safetail'' xs = tail xs
+safetail'' (x:xs) = xs
 
 
 (||) :: Bool -> Bool -> Bool
 False || False = False
 _ || _ = True
 
-True || b = True
-False || b = b
+questA x y = if x && y then True else if False && True then True else if False && False then True else False
 
-quest x y = if x && y then True else if False && True then True else if False && False then True else False
+questB x = if x && True then True else if False && x then True else False
 
-questA x = if x && True then True else if False && x then True else False
+mult :: Int -> Int -> Int -> Int
+mult x y z = x*y*z
+
+mult' = \x -> (\y -> (\z -> x*y*z))
+
+luhnDouble :: Int -> Int
+luhnDouble x = if (2*x) > 9 then 2*x - 9 else 2*x
+luhn :: Int -> Int -> Int -> Int -> Bool
+luhn x y z u = sum [luhnDouble x, y, luhnDouble z, u] `mod` 10 == 0
+
+teste x y z u = sum [luhnDouble x, y, luhnDouble z, u]
