@@ -1,3 +1,4 @@
+import System.Win32 (COORD(x))
 -- Exercícios Hutton cap. 4
 
 halve :: [a] -> ([a], [a])
@@ -17,9 +18,9 @@ safetail'' [] = []
 safetail'' (x:xs) = xs
 
 
-(||) :: Bool -> Bool -> Bool
-False || False = False
-_ || _ = True
+(|||) :: Bool -> Bool -> Bool
+False ||| False = False
+_ ||| _ = True
 
 questA x y = if x && y then True else if False && True then True else if False && False then True else False
 
@@ -30,9 +31,18 @@ mult x y z = x*y*z
 
 mult' = \x -> (\y -> (\z -> x*y*z))
 
+double :: Int -> Int
+double x = x * 2
+trim :: Int -> Int
+trim x = if x > 9 then x - 9 else x
+
 luhnDouble :: Int -> Int
-luhnDouble x = if (2*x) > 9 then 2*x - 9 else 2*x
+luhnDouble x = trim (double x)
+
+divides :: Int -> Bool
+divides x = x `mod` 10 == 0
+
 luhn :: Int -> Int -> Int -> Int -> Bool
-luhn x y z u = sum [luhnDouble x, y, luhnDouble z, u] `mod` 10 == 0
+luhn x y z u = divides (sum [luhnDouble x, y, luhnDouble z, u])
 
 teste x y z u = sum [luhnDouble x, y, luhnDouble z, u]
