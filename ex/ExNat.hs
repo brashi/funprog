@@ -38,62 +38,70 @@ instance Eq Nat where
     (==) (Succ x) (Succ y) = x == y
     (==) _ _ = False
 
-x = Succ Zero
-y = Succ (Succ Zero)
+x = Succ (Succ Zero)
+y = Succ (Succ (Succ (Succ (Succ Zero))))
 
 instance Ord Nat where
 
-    (<=) = undefined
+    (<=) x y = min x y == x
 
     -- Ord does not REQUIRE defining min and max.
     -- Howevener, you should define them WITHOUT using (<=).
     -- Both are binary functions: max m n = ..., etc.
 
-
-    min (Succ m) (Succ n) | m == Zero = m
-                          | otherwise = min m n
     min Zero _ = Zero
     min _ Zero = Zero
+    min (Succ m) (Succ n) = Succ (min m n)
 
-
-
-    max = undefined
+    max Zero n = n
+    max n Zero = n
+    max (Succ m) (Succ n) = Succ (max m n)
 
 isZero :: Nat -> Bool
-isZero = undefined
+isZero x = x == Zero
 
 -- pred is the predecessor but we define zero's to be zero
 pred :: Nat -> Nat
-pred = undefined
+pred Zero = Zero
+pred (Succ n) = n
 
 even :: Nat -> Bool
-even = undefined
+even Zero = True
+even n = odd (pred n)
 
 odd :: Nat -> Bool
-odd = undefined
+odd Zero = False
+odd n = even (pred n)
 
 -- addition
 (<+>) :: Nat -> Nat -> Nat
-(<+>) = undefined
+(<+>) Zero x = x
+(<+>) x Zero = x
+(<+>) x (Succ y) = Succ (x <+> y)
 
 -- This is called the dotminus or monus operator
 -- (also: proper subtraction, arithmetic subtraction, ...).
 -- It behaves like subtraction, except that it returns 0
 -- when "normal" subtraction would return a negative number.
 (<->) :: Nat -> Nat -> Nat
-(<->) = undefined
+(<->) x (Succ y) = pred (x <-> y)
+(<->) Zero x = Zero
+(<->) x Zero = x
 
 -- multiplication
 (<*>) :: Nat -> Nat -> Nat
-(<*>) = undefined
+(<*>) x (Succ y) = (x <*> y) <+> x
+(<*>) x Zero = Zero
 
 -- exponentiation
 (<^>) :: Nat -> Nat -> Nat
-(<^>) = undefined
+(<^>) x Zero = Succ Zero
+(<^>) x (Succ y) = (x <^> y) <*> x
 
 -- quotient
 (</>) :: Nat -> Nat -> Nat
-(</>) = undefined
+(</>) x (Succ y) =  (x <-> Succ y) <*> y 
+(</>) x Zero = x
 
 -- remainder
 (<%>) :: Nat -> Nat -> Nat
