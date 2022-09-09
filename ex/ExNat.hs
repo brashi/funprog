@@ -38,8 +38,10 @@ instance Eq Nat where
     (==) (Succ x) (Succ y) = x == y
     (==) _ _ = False
 
-x = Succ (Succ Zero)
-y = Succ (Succ (Succ (Succ (Succ Zero))))
+tres = Succ (Succ (Succ Zero))
+seis = Succ (Succ (Succ (Succ (Succ (Succ Zero)))))
+cinco = Succ (Succ (Succ (Succ (Succ Zero))))
+dois = Succ (Succ Zero)
 
 instance Ord Nat where
 
@@ -100,16 +102,17 @@ odd n = even (pred n)
 
 -- quotient
 (</>) :: Nat -> Nat -> Nat
-(</>) x (Succ y) =  (x <-> Succ y) <*> y 
-(</>) x Zero = x
+(</>) (Succ x) y = if pred y == (x <%> y) then Succ (x </> y) else x </> y
+(</>) _ _ = Zero
 
 -- remainder
 (<%>) :: Nat -> Nat -> Nat
-(<%>) = undefined
+(<%>) (Succ x) y = if pred y == (x <%> y) then Zero else Succ (x <%> y)
+(<%>) _ _ = Zero
 
 -- divides
 (<|>) :: Nat -> Nat -> Bool
-(<|>) = undefined
+(<|>) x y = x <%> y == Zero
 
 divides = (<|>)
 
