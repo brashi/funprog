@@ -120,16 +120,18 @@ divides = (<|>)
 -- x `absDiff` y = |x - y|
 -- (Careful here: this - is the real minus operator!)
 absDiff :: Nat -> Nat -> Nat
-absDiff = undefined
+absDiff x y = if x <= y then y <-> x else x <-> y
 
 (|-|) = absDiff
 
 factorial :: Nat -> Nat
-factorial = undefined
+factorial (Succ x) = Succ x <*>  factorial (x)
+factorial Zero = Succ Zero
+
 
 -- signum of a number (-1, 0, or 1)
 sg :: Nat -> Nat
-sg = undefined
+sg x = if isZero x then Zero else Succ Zero
 
 -- lo b a is the floor of the logarithm base b of a
 lo :: Nat -> Nat -> Nat
@@ -142,10 +144,12 @@ lo = undefined
 --
 
 toNat :: Integral a => a -> Nat
-toNat = undefined
+toNat 0 = Zero
+toNat n = Succ (toNat (n-1))
 
 fromNat :: Integral a => Nat -> a
-fromNat = undefined
+fromNat Zero = 0
+fromNat (Succ n) = 1 + fromNat n
 
 
 -- Obs: we can now easily make Nat an instance of Num.
