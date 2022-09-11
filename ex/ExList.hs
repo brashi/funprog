@@ -11,8 +11,6 @@ import Prelude
 import qualified Prelude   as P
 import qualified Data.List as L
 import qualified Data.Char as C
-import GHC.List (errorEmptyList)
-import ExNat (Nat(Zero))
 
 -- to use a function from a qualified import
 -- you need to prefix its name with its alias
@@ -27,9 +25,21 @@ head :: [a] -> a
 head (x:_) = x
 head [] = error "lista vazia"
 
+-- Fazendo o Last
+last :: [a] -> a
+last [x] = x
+last (_:xs) = last xs
+last [] = error "lista vazia"
+
 tail :: [a] -> [a]
 tail (_:xs) = xs
 tail [] = error "lista vazia"
+
+-- Init
+init :: [a] -> [a]
+init [x] = []
+init [] = error "lista vazia"
+init (x:xs) = x : init xs
 
 null :: [a] -> Bool
 null [] = True
@@ -62,7 +72,8 @@ infixr 5 ++
 -- (snoc is cons written backwards)
 -- Hey, você disse que não teria Lisp no curso !! D=
 snoc :: a -> [a] -> [a]
-snoc = undefined
+snoc x [] = [x]
+snoc x xs = xs ++ [x]
 
 (<:) :: [a] -> a -> [a]
 (<:) = flip snoc
@@ -139,7 +150,13 @@ infixl 5 +++
 
 -- checks if the letters of a phrase form a palindrome (see below for examples)
 palindrome :: String -> Bool
-palindrome = undefined
+palindrome [] = True
+palindrome xs = palinAux xs == reverse (palinAux xs)
+
+-- Pega apenas as letras e retorna em minúsculo
+palinAux :: String -> String
+palinAux [] = []
+palinAux (x:xs) = if C.isLetter x then C.toLower x : palinAux xs else palinAux xs
 
 {-
 
@@ -151,5 +168,9 @@ Examples of palindromes:
 "Was it a car or a cat I saw?"
 "Doc, note I dissent.  A fast never prevents a fatness.  I diet on cod."
 
+bonuses palindromes:
+"Girafarig"
+"Go hang a salami! I'm a lasagna hog!"
+"No lemon, no melon."
 -}
 
