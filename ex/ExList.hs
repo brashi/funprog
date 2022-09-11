@@ -11,6 +11,8 @@ import Prelude
 import qualified Prelude   as P
 import qualified Data.List as L
 import qualified Data.Char as C
+import GHC.List (errorEmptyList)
+import ExNat (Nat(Zero))
 
 -- to use a function from a qualified import
 -- you need to prefix its name with its alias
@@ -22,34 +24,43 @@ import qualified Data.Char as C
 -- You MUST NOT use ANY of these in your code
 
 head :: [a] -> a
-head = undefined
+head (x:_) = x
+head [] = error "lista vazia"
 
 tail :: [a] -> [a]
-tail = undefined
+tail (_:xs) = xs
+tail [] = error "lista vazia"
 
 null :: [a] -> Bool
-null = undefined
+null [] = True
+null _ = False
 
 length :: Integral i => [a] -> i
-length = undefined
+length [] = 0
+length (_:xs) = 1 + length xs
 
 sum :: Num a => [a] -> a
-sum = undefined
+sum [] = 0
+sum (x:xs) = x + sum xs
 
 product :: Num a => [a] -> a
-product = undefined
+product [] = 1
+product (x:xs) = x * product xs
 
 reverse :: [a] -> [a]
-reverse = undefined
+reverse [] = []
+reverse (x:xs) = reverse xs ++ [x]
 
 (++) :: [a] -> [a] -> [a]
-(++) = undefined
+(++) [] ys = ys
+(++) (x:xs) ys = x : (xs ++ ys)
 
 -- right-associative for performance!
 -- (what?!)
 infixr 5 ++
 
 -- (snoc is cons written backwards)
+-- Hey, você disse que não teria Lisp no curso !! D=
 snoc :: a -> [a] -> [a]
 snoc = undefined
 
