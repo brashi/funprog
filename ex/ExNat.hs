@@ -135,7 +135,8 @@ sg x = if isZero x then Zero else Succ Zero
 
 -- lo b a is the floor of the logarithm base b of a
 lo :: Nat -> Nat -> Nat
-lo = undefined
+lo b (Succ a) = if b == a then a else Succ (lo b (a </> b))
+lo b Zero = Zero
 
 
 --

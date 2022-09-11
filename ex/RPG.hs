@@ -8,9 +8,9 @@ module RPG where
 -- current and total MP (mana points)
 -- current and total GP (gold pieces)
 data Character =
-   Name | Race | Class | HP | MP | GP | Level | XP
+   Name | Race | Class | HP | MP | GP | Level Int | XP
 
-data Attributes = 
+data Attributes =
     Strength | Intelligence | Wisdom | Dexterity | Constitution | Charisma
 
 -- does that make sense?
@@ -19,7 +19,7 @@ type Party = [Character]
 
 -- gets a character and returns one that is the same but +1 level
 gainLevel :: Character -> Character
-gainLevel c = c
+gainLevel = undefined
 
 
 -- to be used when a character is hit
