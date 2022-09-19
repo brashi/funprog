@@ -6,13 +6,18 @@ module ExRat
     ) where
 
 -- define Rat:
-data Rat
+data Rat = Rat {a::Integer, b::Integer } 
+
+racional1 = Rat 1 2
+racional2 = Rat 2 4
+racional3 = Rat 100 200
+racional4 = Rat 1 3
 
 instance Show Rat where
-    show = undefined
+    show rat = show(a rat) ++ "/" ++ show(b rat)
 
 instance Eq Rat where
-    (==) = undefined
+    (==) x y = (a x `div` b x) == (a y `div` b y)
 
 instance Num Rat where
     (+) = undefined

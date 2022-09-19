@@ -20,16 +20,19 @@ type Number = Double
 type Row = [Number]
 type Col = [Number]
 
-data Matrix2x2 = Undefined
+data Matrix2x2 = Matrix2x2 {row1::Row, row2::Row, col1::Col, col2::Col}
 
+mat1 = Matrix2x2 [1, 2] [3, 4] [1, 3] [2, 4]
+
+mat2 = Matrix2x2 [1, 2] [3, 1] [1, 3] [2, 4]
 instance Show Matrix2x2 where
-    show = undefined
+    show mat = show (row1 mat) ++ "\n" ++ show (row2 mat)
 
 instance Eq Matrix2x2 where
-    (==)  = undefined
+    (==)  matX matY = row1 matX == row1 matY && row2 matX == row2 matY
 
 instance Num Matrix2x2 where
-    (+) = undefined
+    (+) matX matY = Matrix2x2 (row1 matX ++ row1 matY) (row2 matX ++ row2 matY) (col1 matX ++ col1 matY) (col2 matX ++ col2 matY)
     (*) = undefined
     negate = undefined
     abs = undefined
