@@ -59,7 +59,7 @@ product (x:xs) = x * product xs
 
 reverse :: [a] -> [a]
 reverse [] = []
-reverse (x:xs) = reverse xs ++ [x]
+reverse (x:xs) = reverse xs <: x
 
 (++) :: [a] -> [a] -> [a]
 (++) [] ys = ys
@@ -73,7 +73,7 @@ infixr 5 ++
 -- Hey, você disse que não teria Lisp no curso !! D=
 snoc :: a -> [a] -> [a]
 snoc x [] = [x]
-snoc x xs = xs ++ [x]
+snoc y (x:xs) = x : snoc y xs
 
 (<:) :: [a] -> a -> [a]
 (<:) = flip snoc
@@ -101,13 +101,32 @@ drop _ [] = []
 drop 0 xs = xs
 drop n (x:xs) = drop (n - 1) xs
 
--- takeWhile
--- dropWhile
+-- Desta maneira, ou usando um Guards com otherwise = []
+takeWhile :: (a -> Bool) -> [a] -> [a]
+takeWhile p (x:xs) = if p x then x : takeWhile p xs else []
+takeWhile _ [] = []
 
--- inits
+dropWhile :: (a -> Bool) -> [a] -> [a]
+dropWhile p (x:xs) = if p x then dropWhile p xs else x:xs
+dropWhile _ [] = []
 
--- subsequences
 
+inits :: [a] -> [[a]]
+inits (x:xs) = [] : map (x:) (inits xs) 
+inits [] = [[]]
+
+tails :: [a] -> [[a]]
+tails (x:xs) = (x:xs) : tails xs
+tails [] = [[]]
+
+subsequences :: [a] -> [[a]]
+subsequences [] = [[]]
+subsequences (x:xs) = subsequences xs ++ map (x:) (subsequences xs)
+
+teste :: [a] -> [[a]]
+teste [] = [[]]
+teste (x:xs) =  L.foldr (\ys r -> ys : (x : ys) : r) [] (teste xs)
+-- subsequences (x:xs) =  [x] : L.foldr f [] (subsequences xs) where f ys r = ys : (x : ys) : r 
 -- any
 -- all
 
@@ -124,7 +143,9 @@ drop n (x:xs) = drop (n - 1) xs
 -- (!!)
 
 -- filter
--- map
+map :: (a -> a) -> [a] -> [a]
+map p (x:xs) = p x : map p xs
+map _ [] = []
 
 -- cycle
 -- repeat
