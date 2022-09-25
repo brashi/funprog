@@ -119,31 +119,55 @@ tails :: [a] -> [[a]]
 tails (x:xs) = (x:xs) : tails xs
 tails [] = [[]]
 
+foldr :: (a -> b -> b) -> b -> [a] -> b
+foldr _ z [] = z
+foldr f z (x:xs) = f x (foldr f z xs)
+
 subsequences :: [a] -> [[a]]
 subsequences [] = [[]]
-subsequences (x:xs) = subsequences xs ++ map (x:) (subsequences xs)
-
-teste :: [a] -> [[a]]
-teste [] = [[]]
-teste (x:xs) =  L.foldr (\ys r -> ys : (x : ys) : r) [] (teste xs)
+-- subsequences (x:xs) = subsequences xs ++ map (x:) (subsequences xs)
+subsequences (x:xs) =  foldr (\ys r -> ys : (x : ys) : r) [] (subsequences xs)
 -- subsequences (x:xs) =  [x] : L.foldr f [] (subsequences xs) where f ys r = ys : (x : ys) : r 
--- any
--- all
 
--- and
--- or
+any :: (a -> Bool) -> [a] -> Bool
+any _ [] = False
+any p (x:xs) = p x || any p xs
 
--- concat
+all :: (a -> Bool) -> [a] -> Bool
+all _ [] = True
+all p (x:xs) = p x && all p xs
+
+and :: [Bool] -> Bool
+and [] = True
+and (x:xs) = x && and xs
+
+or :: [Bool] -> Bool
+or [] = False
+or (x:xs) = x || or xs
+
+concat :: [[a]] -> [a]
+concat [] = []
+concat (x:xs) = x ++ concat xs
 
 -- elem using the funciton 'any' above
-
+elem :: (Eq a) => a -> [a] -> Bool
+elem y xs = any(== y) xs
 -- elem': same as elem but elementary definition
 -- (without using other functions except (==))
+elem' _ [] = False
+elem' x (y:ys) = x == y || elem' x ys
 
--- (!!)
+(!!) :: [a] -> Int -> a
+(!!) [] _ = error "Indice não existe !!"
+(!!) (x:xs) 0 = x
+(!!) (x:xs) y = (!!) xs (y-1)
 
--- filter
-map :: (a -> a) -> [a] -> [a]
+filter :: (a -> Bool) -> [a] -> [a]
+filter _ [] = []
+filter p (x:xs) = if p x then x : filter p xs else filter p xs 
+
+
+map :: (a -> b) -> [a] -> [b]
 map p (x:xs) = p x : map p xs
 map _ [] = []
 
