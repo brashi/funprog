@@ -88,8 +88,13 @@ xs +++ (y:ys) = (xs +++ [y]) +++ ys
 -- (hmm?)
 infixl 5 +++
 
--- minimum :: Ord a => [a] -> a
--- maximum :: Ord a => [a] -> a
+minimum :: Ord a => [a] -> a
+minimum [] = error "Lista vazia."
+minimum (x:xs) = foldr min x xs
+
+maximum :: Ord a => [a] -> a
+maximum [] = error "Lista vazia."
+maximum (x:xs) = foldr max x xs
 
 take :: Int -> [a] -> [a]
 take 0 _ = []
@@ -112,7 +117,7 @@ dropWhile _ [] = []
 
 
 inits :: [a] -> [[a]]
-inits (x:xs) = [] : map (x:) (inits xs) 
+inits (x:xs) = [] : map (x:) (inits xs)
 inits [] = [[]]
 
 tails :: [a] -> [[a]]
@@ -164,7 +169,7 @@ elem' x (y:ys) = x == y || elem' x ys
 
 filter :: (a -> Bool) -> [a] -> [a]
 filter _ [] = []
-filter p (x:xs) = if p x then x : filter p xs else filter p xs 
+filter p (x:xs) = if p x then x : filter p xs else filter p xs
 
 
 map :: (a -> b) -> [a] -> [b]
@@ -179,7 +184,11 @@ map _ [] = []
 -- isInfixOf
 -- isSuffixOf
 
--- zip
+zip :: [a] -> [b] -> [(a,b)]
+zip [] _ = []
+zip _ [] = [] 
+zip (x:xs) (y:ys) = (x,y) : zip xs ys
+
 -- zipWith
 
 -- intercalate
@@ -191,10 +200,19 @@ map _ [] = []
 
 -- break
 
--- lines
--- words
--- unlines
--- unwords
+lines :: [Char] -> [[Char]]
+lines = foldr (\x (y:ys) -> if x == '\n' then "":(y:ys) else (x:y):ys) [[]]
+
+words :: [Char] -> [[Char]]
+words = foldr (\x (y:ys) -> if C.isSpace x then "":(y:ys) else (x:y):ys) [[]]
+
+unlines :: [[Char]] -> [Char]
+unlines [] = ""
+unlines xs = foldr(\x s -> x ++ '\n':s) [] xs
+
+unwords :: [[Char]] -> [Char]
+unwords [] = ""
+unwords xs = foldr (\x s -> x ++ ' ':s) [] xs
 
 -- transpose
 
