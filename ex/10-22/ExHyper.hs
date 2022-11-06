@@ -1,0 +1,59 @@
+module ExHyper where
+
+import Prelude hiding ( exp )
+
+-- Nat datatype --------------------------------
+
+data Nat = Z | S Nat
+     deriving (Eq, Show)
+
+instance (Num Nat) where
+    (+) = add
+    (*) = mul
+    abs = id
+    fromInteger 0 = Z
+    fromInteger n
+      | n > 0     = S $ fromInteger (n-1)
+      | otherwise = Z
+    signum Z = Z
+    signum n = S Z
+    negate n = Z
+
+instance (Ord Nat) where
+    Z     <= m     = True
+    (S n) <= Z     = False
+    (S n) <= (S m) = n <= m
+
+{- explicit definitions of add, mul, exp: 
+
+add n Z     = n
+add n (S m) = S (add m n)
+
+mul n Z     = Z
+mul n (S m) = add (mul n m) n
+
+exp n Z     = S Z
+exp n (S m) = mul (exp n m) n
+
+-}
+
+------------------------------------------------
+
+-- substitute 'undefined' by the correct number
+-- to define each of those functions:
+
+add :: Nat -> Nat -> Nat
+add = hyper undefined
+
+mul :: Nat -> Nat -> Nat
+mul = hyper undefined
+
+exp :: Nat -> Nat -> Nat
+exp = hyper undefined
+
+-- hyper n should return the n'th operation in the sequence:
+-- (..?..), add, mul, exp, ...?
+
+hyper :: Integral i => i -> (Nat -> Nat -> Nat)
+hyper = undefined
+
