@@ -16,6 +16,7 @@ safeHead (x:xs) = Just x
 -- * Just a simple (yes/no)
 -- * Nothing to say (cause nobody has this property)
 isGoodFirstThat :: (a -> Bool) -> (a -> Bool) -> [a] -> Maybe Bool
-isGoodFirstThat good p xs = case firstThat p xs of
-    Nothing -> Nothing
-    Just x -> Just (good x)
+isGoodFirstThat good p xs = 
+    case firstThat p xs of
+        Nothing -> Nothing
+        Just x -> Just (good x)

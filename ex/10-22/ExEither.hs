@@ -8,19 +8,22 @@ data Either a b = Left a | Right b
     deriving (Show, Eq)
 
 isLeft :: Either a b -> Bool
-isLeft = undefined
+isLeft (Left a) = True
+isLeft _ = False
 
 isRight :: Either a b -> Bool
-isRight = undefined
+isRight (Right b) = True
+isRight _ = False
 
 lefts :: [Either a b] -> [a]
-lefts = undefined
+lefts es = map (\(Left x) -> x) $ filter isLeft es
 
 rights :: [Either a b] -> [b]
-rights = undefined
+rights es =  map (\(Right x) -> x) $ filter isRight es
 
 fromLeft :: a -> Either a b -> a
-fromLeft = undefined
+fromLeft _ (Left a) = a
+fromLeft d _ = d
 
 fromRight :: b -> Either a b -> b
 fromRight = undefined
