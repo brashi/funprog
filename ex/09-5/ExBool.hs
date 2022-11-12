@@ -49,8 +49,10 @@ infixr 3 &&
 
 -- disjunction (OR)
 (||) :: Bool -> Bool -> Bool
-(||) False False = False
-(||) _ _ = True
+-- (||) False False = False
+-- (||) _ _ = True
+(||) True _ = True
+(||) False b = b
 
 infixr 2 ||
 
@@ -71,8 +73,9 @@ infixr 2 \|/
 
 -- XOR (exclusive disjunction)
 (<=/=>) :: Bool -> Bool -> Bool
-(<=/=>) True True = False
-(<=/=>) a b = a || b
+(<=/=>) a b = not (a <=> b)
+-- (<=/=>) True True = False
+-- (<=/=>) a b = a || b
 -- (<=/=>) a b = (a || b) && not(a && b)
 
 infixr 2 <=/=>

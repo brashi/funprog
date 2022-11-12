@@ -19,6 +19,8 @@ import Prelude
     , otherwise
     )
 import Distribution.Compat.Lens (_1)
+import Data.Maybe (Maybe)
+import Data.Maybe
 
 -- Define evenerything that is undefined,
 -- without using standard Haskell functions.
@@ -138,6 +140,11 @@ lo :: Nat -> Nat -> Nat
 lo b (Succ a) = if b == a then a else Succ (lo b (a </> b))
 lo b Zero = Zero
 
+
+pick :: Nat -> [a] -> Maybe a
+pick (Succ n) (x:xs) = pick n xs
+pick Zero (x:xs) = Just x
+pick _ [] = Nothing
 
 --
 -- For the following functions we need Num(..).

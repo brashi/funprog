@@ -186,10 +186,12 @@ map _ [] = []
 
 zip :: [a] -> [b] -> [(a,b)]
 zip [] _ = []
-zip _ [] = [] 
+zip _ [] = []
 zip (x:xs) (y:ys) = (x,y) : zip xs ys
 
--- zipWith
+zipWith f (x:xs) (y:ys) = f x y : zipWith f xs ys
+zipWith f [] _ = []
+zipWith f _ [] = []
 
 -- intercalate
 -- nub
