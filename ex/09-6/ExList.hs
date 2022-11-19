@@ -228,6 +228,12 @@ palinAux :: String -> String
 palinAux [] = []
 palinAux (x:xs) = if C.isLetter x then C.toLower x : palinAux xs else palinAux xs
 
+
+enumFromTo' :: (Eq t, Num t) => t -> t -> [t]
+enumFromTo' x n = if (x == n) then [x] else x : enumFromTo' (x + 1) n
+
+enumFromToStep' :: (Eq t, Num t) => t -> t -> t -> [t]
+enumFromToStep' x k m = if (x == m) then [x] else x : enumFromToStep' (x + k) k m
 {-
 
 Examples of palindromes:
