@@ -25,7 +25,7 @@ import Prelude
     )
 import qualified Data.Char as C
     -- probably you will not need all of them:
-    ( isAlpha , isSymbol , isPunctuation , isSpace , toLower )
+    ( isAlpha , isSymbol , isPunctuation , isSpace , toLower, isLetter, intToDigit )
 
 -- Your imports should go here.
 -- Might want to make them qualified;
@@ -37,6 +37,7 @@ import qualified Data.Char as C
 import Sort ( sort )
 
 -- **REPLACE** Data.List by your own home-made ExList!
+-- **REPLACE** Data.List by your own home-made ExList!
 import ExList2
     -- feel free to remove and/or add entities:
     ( break
@@ -45,8 +46,11 @@ import ExList2
     , map
     , filter
     , take
-    , dropWhile
+    , dropWhile, length
+    , reverse
     )
+import Text.Printf (IsChar(toChar))
+import Data.Char (intToDigit)
 
 -- Let's start with some type synonyms you might want to use:
 
@@ -55,6 +59,7 @@ type Word = String
 
 -- On with the functions now:
 
+texto = "Define the function commonWords,\nwhich should receive an Int n and a text and\nreturn some string describing the n most common words\nfound in the input text."
 
 commonWords
     :: Int     -- how many common words
@@ -72,23 +77,28 @@ concatMap :: (a -> [b]) -> [a] -> [b]
 concatMap f = concat . map f
 
 showRun :: (Int,Word) -> String
-showRun (n,w) = w
+showRun (n,w) = concat [w, ":", " ", [intToDigit n], "\n"]
 
 -- if you think this makes your code more readable...
 type Run = [(Int,Word)]
 
+count :: (Integral c, Eq a) => a -> [a] -> c
+count x = ExList2.length . filter (==x)
+
 countRuns :: [Word] -> [(Int,Word)]
-countRuns ws = undefined
+countRuns [] = []
+countRuns ws'@(w:ws) = (c,w) : countRuns (filter (/= w) ws)
+                    where c = count w ws'
 
 sortWords :: [Word] -> [Word]
-sortWords = sort    -- is this correct? (I guess so ?)
+sortWords = sort
 
 sortRuns :: [(Int,Word)] -> [(Int,Word)]
-sortRuns = sort     -- is this correct?
+sortRuns = reverse . sort     -- is this correct?
 
 words :: Text -> [Word]
-words s = case dropWhile C.isSpace s of
-                "" -> []
-                s' -> w : words s''
-                    where (w, s'') =
-                            break C.isSpace s'
+words s =
+    case dropWhile (not . C.isLetter) s of
+         "" -> []
+         s' -> let (w, s'') = span C.isLetter s'
+                in w : words s''
