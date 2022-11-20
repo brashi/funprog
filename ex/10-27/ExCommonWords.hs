@@ -37,7 +37,7 @@ import qualified Data.Char as C
 import Sort ( sort )
 
 -- **REPLACE** Data.List by your own home-made ExList!
-import Data.List
+import ExList2
     -- feel free to remove and/or add entities:
     ( break
     , span
@@ -45,6 +45,7 @@ import Data.List
     , map
     , filter
     , take
+    , dropWhile
     )
 
 -- Let's start with some type synonyms you might want to use:
@@ -61,25 +62,33 @@ commonWords
     -> String  -- the output string with the results
 
 commonWords n =
-    concat . map showRun . take n .
+    concatMap showRun . take n .
     sortRuns . countRuns .
     sortWords . words .
     map C.toLower
 
+-- Bonus
+concatMap :: (a -> [b]) -> [a] -> [b]
+concatMap f = concat . map f
+
 showRun :: (Int,Word) -> String
-showRun = undefined
+showRun (n,w) = w
 
 -- if you think this makes your code more readable...
 type Run = [(Int,Word)]
 
 countRuns :: [Word] -> [(Int,Word)]
-countRuns = undefined
+countRuns ws = undefined
 
 sortWords :: [Word] -> [Word]
-sortWords = sort    -- is this correct?
+sortWords = sort    -- is this correct? (I guess so ?)
 
 sortRuns :: [(Int,Word)] -> [(Int,Word)]
 sortRuns = sort     -- is this correct?
 
 words :: Text -> [Word]
-words = undefined
+words s = case dropWhile C.isSpace s of
+                "" -> []
+                s' -> w : words s''
+                    where (w, s'') =
+                            break C.isSpace s'

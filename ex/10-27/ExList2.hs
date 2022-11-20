@@ -1,4 +1,4 @@
-module ExList where
+module ExList2 where
 
 import Prelude
     ( Char , String , Int , Integer , Double , Float , Bool(..)
