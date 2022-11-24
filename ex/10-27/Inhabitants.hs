@@ -8,13 +8,13 @@ module Inhabitants where
 -- f, f', f'', f''', f'''', etc.
 
 cI :: a -> a
-cI = undefined
+cI = \x -> x
 
 cK :: a -> b -> a
-cK = undefined
+cK = \x -> \y -> x
 
 cS :: (a -> b -> c) -> (a -> b) -> (a -> c)
-cS = undefined
+cS f g x = f x (g x)
 
 cB :: (b -> c) -> ((a -> b) -> (a -> c))
 cB = undefined

@@ -102,3 +102,5 @@ words s =
          "" -> []
          s' -> let (w, s'') = span C.isLetter s'
                 in w : words s''
+
+split = undefined

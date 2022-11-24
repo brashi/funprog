@@ -139,7 +139,7 @@ sequenceIO_ = undefined
 replicateIO :: Integral i => i -> IO a -> IO [a]
 replicateIO = undefined
 
-replicateIO_ :: Integral i => i -> IO a -> IO [a]
+replicateIO_ :: Integral i => i -> IO a -> IO ()
 replicateIO_ = undefined
 
 forIO :: [a] -> (a -> IO b) -> IO [b]
