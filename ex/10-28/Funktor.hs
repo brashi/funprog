@@ -29,6 +29,9 @@ instance Funktor ((,) e) where
       fmap :: (a -> b) -> (e, a) -> (e, b)
       fmap f (x,y) = (x, f y)
 
+instance Funktor ((->) r) where
+    fmap = (.)
+
 -- what about Trees?
 
 -- ...define Functor instances of as many * -> * things as you can think of!

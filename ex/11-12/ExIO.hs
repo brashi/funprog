@@ -13,10 +13,19 @@ import Prelude hiding
 -- of what's required and to decide where to start
 
 getLine :: IO String
-getLine = undefined
+getLine = do
+            c <- getChar
+            if c == '\n'
+                then return ""
+                else
+                    do
+                        l <- getLine
+                        return (c:l)
 
 getInt :: IO Int
-getInt = undefined
+getInt = do 
+            inteiro <- getLine
+            return (read inteiro :: Int)
 
 getSafeInt :: IO (Maybe Int)
 getSafeInt = undefined

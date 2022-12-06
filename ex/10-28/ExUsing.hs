@@ -6,16 +6,18 @@ import Prelude hiding
 
 type Pred a = (a -> Bool)
 
+test :: (a -> Bool) -> a -> [a]
+test p x = [x | p x]
 -- using concat
 filter :: Pred a -> [a] -> [a]
-filter = undefined
+filter p = concat . map (test p)
 
 -- using zipWith
 sorted :: Ord a => [a] -> Bool
-sorted = undefined
+sorted = and . (zipWith (<=) <*> tail)
 
 -- using zipWith
 fibs :: Integral i => [i]
-fibs = undefined
+fibs = 1 : 1 : zipWith (+) fibs (tail fibs)
 
 
