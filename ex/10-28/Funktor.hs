@@ -1,13 +1,18 @@
 {-# LANGUAGE InstanceSigs #-}
 module Funktor where
 
-import Prelude hiding ( fmap , (<$) )
+import Prelude hiding ( fmap , (<$), (<$>) )
 
 class Funktor f where
   fmap :: (a -> b) -> f a -> f b
 
   (<$) :: b        -> f a -> f b
   (<$) = fmap . const
+
+
+infixl 4 <$>
+(<$>) :: Funktor f => (a -> b) -> f a -> f b
+(<$>) = fmap
 
 
 instance Funktor [] where
@@ -32,7 +37,17 @@ instance Funktor ((,) e) where
 instance Funktor ((->) r) where
     fmap = (.)
 
--- what about Trees?
+data Tree a = Node a (Tree a) (Tree a) | Leaf a deriving (Show)
 
+instance Funktor Tree where
+    fmap g (Leaf a) = Leaf (g a)
+    fmap g (Node x l r) = Node (g x) (fmap g l) (fmap g r)
+
+instance Funktor IO where
+    fmap :: (a -> b) -> IO a -> IO b
+    fmap f ax =
+        do 
+            x <- ax
+            return (f x)
 -- ...define Functor instances of as many * -> * things as you can think of!
 

@@ -1,3 +1,4 @@
+{-# LANGUAGE InstanceSigs #-}
 module FA where
 
 import Prelude hiding
@@ -36,13 +37,14 @@ instance Funktor ((->) r) where
     fmap = (.)
 
 instance Funktor (Either a) where
+    fmap :: (a2 -> b) -> Either a1 a2 -> Either a1 b
     fmap f (Left e) = Left e
     fmap f (Right x) = Right (f x)
 
 instance Funktor IO where
-    fmap f ax = 
-        do x <- ax
-           return $ f x
+    fmap f ax =
+        do  x <- ax
+            return (f x)
 
 class Funktor f => Applikative f where
   pure  :: a -> f a
@@ -64,7 +66,7 @@ instance Applikative Maybe where
     _ <*> _ = Nothing
 
 instance Applikative [] where
-    pure = repeat
+    pure x = [x]
     fs <*> xs = [ f x | f <- fs , x <- xs ]
 
 newtype ZipList a = ZipList [a]
@@ -74,19 +76,21 @@ instance Funktor ZipList where
 
 instance Applikative ZipList where
     pure x = ZipList [x]
-    (ZipList fs) <*> (ZipList xs) = ZipList $ zipWith ($) fs xs
+    (ZipList fs) <*> (ZipList xs) = ZipList ( zipWith ($) fs xs)
 
 instance Applikative IO where
-    pure = undefined
-    (<*>) = undefined
+    pure = return
+    mg <*> mx = do  g <- mg
+                    x <- mx
+                    return $ g x
 
 instance Monoid m => Applikative ((,) m) where
     pure = undefined
     (<*>) = undefined
 
 instance Applikative ((->) r) where
-    pure = undefined
-    (<*>) = undefined
+    pure = const
+    (<*>) f g x = f x (g x)
 
 instance Semigroup e => Applikative (Either e) where
     pure = undefined
@@ -99,27 +103,27 @@ instance Semigroup e => Applikative (Either e) where
 -- You should study Typeclassopedia:
 -- https://wiki.haskell.org/Typeclassopedia#Applicative
 
-liftA :: Applicative f => (a -> b) -> f a -> f b
+liftA :: Applikative f => (a -> b) -> f a -> f b
 liftA = undefined
 
-liftA2 :: Applicative f => (a -> b -> c) -> f a -> f b -> f c
+liftA2 :: Applikative f => (a -> b -> c) -> f a -> f b -> f c
 liftA2 = undefined
 
-(*>) :: Applicative f => f a -> f b -> f b
+(*>) :: Applikative f => f a -> f b -> f b
 (*>) = undefined
 
-(<*) :: Applicative f => f a -> f b -> f a
+(<*) :: Applikative f => f a -> f b -> f a
 (<*) = undefined
 
-(<**>) :: Applicative f => f a -> f (a -> b) -> f b
+(<**>) :: Applikative f => f a -> f (a -> b) -> f b
 (<**>) = undefined
 
-when :: Applicative f => Bool -> f () -> f ()
+when :: Applikative f => Bool -> f () -> f ()
 when = undefined
 
-unless :: Applicative f => Bool -> f () -> f ()
+unless :: Applikative f => Bool -> f () -> f ()
 unless = undefined
 
-sequenceAL :: Applicative f => [f a] -> f [a]
+sequenceAL :: Applikative f => [f a] -> f [a]
 sequenceAL = undefined
 
