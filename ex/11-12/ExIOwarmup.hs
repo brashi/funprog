@@ -81,3 +81,9 @@ getCh = do
         x <- getChar
         hSetEcho stdin True
         return x
+
+main :: IO String
+main = 
+    do 
+        x <- sgetLine
+        return x

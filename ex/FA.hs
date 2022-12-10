@@ -12,6 +12,7 @@ import Prelude hiding
     , (*>)
     , liftA , liftA2 , liftA3
     )
+import Control.Applicative (Applicative)
 
 class Funktor f where
   fmap :: (a -> b) -> f a -> f b
@@ -84,6 +85,10 @@ instance Applikative IO where
                     x <- mx
                     return $ g x
 
+class Applikative m => Monad m where
+    returne :: a -> m a
+    (>>=) :: m a -> (a -> m b) -> m b
+    
 instance Monoid m => Applikative ((,) m) where
     pure = undefined
     (<*>) = undefined
@@ -127,3 +132,8 @@ unless = undefined
 sequenceAL :: Applikative f => [f a] -> f [a]
 sequenceAL = undefined
 
+
+filterM p [] = return []
+filterM p (x:xs) = do   b <- p x
+                        ys <- filterM p xs
+                        return (if b then x:ys else ys)
